@@ -12,10 +12,42 @@ import '../../index.css';
 import styles from './app.module.css';
 
 import { AppHeader, Modal, OrderInfo } from '@components';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import {
+  Route,
+  Routes,
+  useLocation,
+  useMatch,
+  useNavigate
+} from 'react-router-dom';
+import { useEffect } from 'react';
+import { useDispatch } from '../../services/store';
+import { getIngredients } from '../../services/ingredientsSlice';
+import { checkUserAuth, userActions } from '../../services/userSlice';
 
 const App = () => {
   const location = useLocation();
+  const background = location.state?.background;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleModalIngredientClose = () => {
+    navigate('./');
+  };
+  const handleFeedModalClose = () => {
+    navigate('./feed');
+  };
+
+  const handleProfileOrdersModalClose = () => {
+    navigate('./profile/orders');
+  };
+
+  const profileOrderMatch = useMatch('/profile/orders/:number')?.params.number;
+  const feedOrderMatch = useMatch('/feed/:number')?.params.number;
+  const orderNumber = profileOrderMatch || feedOrderMatch;
+  useEffect(() => {
+    dispatch(getIngredients());
+    dispatch(checkUserAuth()).finally(() => dispatch(userActions.authCheck()));
+  }, [dispatch]);
+
   return (
     <div className={styles.app}>
       <AppHeader />
