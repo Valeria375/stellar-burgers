@@ -11,7 +11,7 @@ import {
 import '../../index.css';
 import styles from './app.module.css';
 
-import { AppHeader, Modal, OrderInfo } from '@components';
+import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
   Route,
   Routes,
@@ -68,25 +68,23 @@ const App = () => {
           path='/feed/:number'
           element={
             <Modal
-              title={''}
-              onClose={function (): void {
-                throw new Error('Function not implemented.');
-              }}
+              title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+              onClose={handleFeedModalClose}
             >
               <OrderInfo />
             </Modal>
           }
         />
 
-        {/* <Route
+        <Route
           path='/ingredients/:id'
           element={
             <Modal
-              title={''}
-              onClose={function (): void {
-                throw new Error('Function not implemented.');
-              }}
-            ></Modal>
+              title='Детали ингредиента'
+              onClose={handleModalIngredientClose}
+            >
+              <IngredientDetails />
+            </Modal>
           }
         />
 
@@ -94,15 +92,13 @@ const App = () => {
           path='/profile/orders/:number'
           element={
             <Modal
-              title={''}
-              onClose={function (): void {
-                throw new Error('Function not implemented.');
-              }}
+              title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+              onClose={handleProfileOrdersModalClose}
             >
               <OrderInfo />
             </Modal>
           }
-        /> */}
+        />
       </Routes>
     </div>
   );
