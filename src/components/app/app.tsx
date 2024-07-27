@@ -62,13 +62,40 @@ const App = () => {
         <Route path='/reset-password' element={<ResetPassword />} />
         <Route path='/profile' element={<Profile />} />
         <Route path='/profile/orders' element={<ProfileOrders />} />
-
+        <Route
+          path='/feed/:number'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p
+                className={`text text_type_digits-default ${styles.detailHeader}`}
+              >
+                #${orderNumber && orderNumber.padStart(6, '0')}
+              </p>
+              {/* <OrderStatus status={orderInfo && orderInfo.status} /> */}
+              <OrderInfo />
+            </div>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p
+                className={`text text_type_digits-default ${styles.detailHeader}`}
+              >
+                #${orderNumber && orderNumber.padStart(6, '0')}
+              </p>
+              <OrderInfo />
+            </div>
+          }
+        />
         {/* Modals */}
         <Route
           path='/feed/:number'
           element={
             <Modal
               title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+              // title='проба'
               onClose={handleFeedModalClose}
             >
               <OrderInfo />
@@ -82,6 +109,7 @@ const App = () => {
             <Modal
               title='Детали ингредиента'
               onClose={handleModalIngredientClose}
+              // onClose={handleFeedModalClose}
             >
               <IngredientDetails />
             </Modal>
@@ -93,6 +121,7 @@ const App = () => {
           element={
             <Modal
               title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+              // title='проба'
               onClose={handleProfileOrdersModalClose}
             >
               <OrderInfo />

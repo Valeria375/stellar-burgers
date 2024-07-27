@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../services/store';
 import { userSelectors } from '../../services/userSlice';
 import { useDispatch } from '../../services/store';
-import { orderBurger } from '../../services/slices/burgerConstructorSlice';
+import {
+  BurgerConstructorActions,
+  orderBurger
+} from '../../services/slices/burgerConstructorSlice';
 
 export const BurgerConstructor: FC = () => {
   /** TODO: взять переменные constructorItems, orderRequest и orderModalData из стора */
@@ -38,7 +41,9 @@ export const BurgerConstructor: FC = () => {
       dispatch(orderBurger(ingredientIds));
     }
   };
-  const closeOrderModal = () => {};
+  const closeOrderModal = () => {
+    dispatch(BurgerConstructorActions.resetBurgerConstructor());
+  };
 
   const price = useMemo(
     () =>
