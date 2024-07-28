@@ -135,48 +135,52 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        {/* Modals */}
-        <Route
-          path='/feed/:number'
-          element={
-            <Modal
-              title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
-              // title='проба'
-              onClose={handleFeedModalClose}
-            >
-              <OrderInfo />
-            </Modal>
-          }
-        />
-
-        <Route
-          path='/ingredients/:id'
-          element={
-            <Modal
-              title='Детали ингредиента'
-              onClose={handleModalIngredientClose}
-              // onClose={handleFeedModalClose}
-            >
-              <IngredientDetails />
-            </Modal>
-          }
-        />
-
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
+      </Routes>
+      {background && (
+        <Routes>
+          {/* Modals */}
+          <Route
+            path='/feed/:number'
+            element={
               <Modal
                 title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
                 // title='проба'
-                onClose={handleProfileOrdersModalClose}
+                onClose={handleFeedModalClose}
               >
                 <OrderInfo />
               </Modal>
-            </ProtectedRoute>
-          }
-        />
-      </Routes>
+            }
+          />
+
+          <Route
+            path='/ingredients/:id'
+            element={
+              <Modal
+                title='Детали ингредиента'
+                onClose={handleModalIngredientClose}
+                // onClose={handleFeedModalClose}
+              >
+                <IngredientDetails />
+              </Modal>
+            }
+          />
+
+          <Route
+            path='/profile/orders/:number'
+            element={
+              <ProtectedRoute>
+                <Modal
+                  title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+                  // title='проба'
+                  onClose={handleProfileOrdersModalClose}
+                >
+                  <OrderInfo />
+                </Modal>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      )}
     </div>
   );
 };
