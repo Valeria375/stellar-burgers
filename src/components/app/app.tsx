@@ -23,6 +23,7 @@ import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
 import { checkUserAuth, userActions } from '../../services/userSlice';
+import { ProtectedRoute } from '../protectedRoute/protectedRoute';
 
 const App = () => {
   const location = useLocation();
@@ -56,37 +57,82 @@ const App = () => {
         <Route path='/feed' element={<Feed />} />
 
         {/* Protected Routes */}
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/forgot-password' element={<ForgotPassword />} />
-        <Route path='/reset-password' element={<ResetPassword />} />
-        <Route path='/profile' element={<Profile />} />
-        <Route path='/profile/orders' element={<ProfileOrders />} />
+        <Route
+          path='/login'
+          element={
+            <ProtectedRoute>
+              <Login />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/register'
+          element={
+            <ProtectedRoute>
+              <Register />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/forgot-password'
+          element={
+            <ProtectedRoute>
+              <ForgotPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/reset-password'
+          element={
+            <ProtectedRoute>
+              <ResetPassword />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile'
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path='/profile/orders'
+          element={
+            <ProtectedRoute>
+              <ProfileOrders />
+            </ProtectedRoute>
+          }
+        />
         <Route
           path='/feed/:number'
           element={
-            <div className={styles.detailPageWrap}>
-              <p
-                className={`text text_type_digits-default ${styles.detailHeader}`}
-              >
-                #${orderNumber && orderNumber.padStart(6, '0')}
-              </p>
-              {/* <OrderStatus status={orderInfo && orderInfo.status} /> */}
-              <OrderInfo />
-            </div>
+            <ProtectedRoute>
+              <div className={styles.detailPageWrap}>
+                <p
+                  className={`text text_type_digits-default ${styles.detailHeader}`}
+                >
+                  #${orderNumber && orderNumber.padStart(6, '0')}
+                </p>
+                <OrderInfo />
+              </div>
+            </ProtectedRoute>
           }
         />
         <Route
           path='/profile/orders/:number'
           element={
-            <div className={styles.detailPageWrap}>
-              <p
-                className={`text text_type_digits-default ${styles.detailHeader}`}
-              >
-                #${orderNumber && orderNumber.padStart(6, '0')}
-              </p>
-              <OrderInfo />
-            </div>
+            <ProtectedRoute>
+              <div className={styles.detailPageWrap}>
+                <p
+                  className={`text text_type_digits-default ${styles.detailHeader}`}
+                >
+                  #${orderNumber && orderNumber.padStart(6, '0')}
+                </p>
+                <OrderInfo />
+              </div>
+            </ProtectedRoute>
           }
         />
         {/* Modals */}
@@ -119,13 +165,15 @@ const App = () => {
         <Route
           path='/profile/orders/:number'
           element={
-            <Modal
-              title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
-              // title='проба'
-              onClose={handleProfileOrdersModalClose}
-            >
-              <OrderInfo />
-            </Modal>
+            <ProtectedRoute>
+              <Modal
+                title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
+                // title='проба'
+                onClose={handleProfileOrdersModalClose}
+              >
+                <OrderInfo />
+              </Modal>
+            </ProtectedRoute>
           }
         />
       </Routes>
