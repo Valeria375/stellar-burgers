@@ -1,10 +1,10 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
-import { RootState, useDispatch, useSelector } from '../../services/store';
+import { useSelector, RootState } from '../../services/store';
 import { updateUser } from '../../services/userSlice';
+import { useDispatch } from '../../services/store';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
   const userState = useSelector((state: RootState) => state.user);
   const user = userState.data || { name: '', email: '' };
   const dispatch = useDispatch();
@@ -64,6 +64,4 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  return null;
 };
