@@ -22,7 +22,7 @@ import {
 import { useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
-import { checkUserAuth, userActions } from '../../services/userSlice';
+import { checkUserAuth, userActions } from '../../services/slices/userSlice';
 import { ProtectedRoute } from '../protectedRoute/protectedRoute';
 
 const App = () => {

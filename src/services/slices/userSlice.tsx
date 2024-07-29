@@ -7,9 +7,9 @@ import {
   updateUserApi,
   TRegisterData
 } from '@api';
-// import { setCookie } from 'src/utils/cookie';
-// import { isActionPending, isActionRejected } from '../../utils/redux';
-// import { deleteCookie } from '../../utils/cookie';
+import { setCookie } from '../../utils/cookie';
+import { isActionPending, isActionRejected } from '../../utils/redux';
+import { deleteCookie } from '../../utils/cookie';
 import { TUser, RequestStatus } from '@utils-types';
 
 interface TUserState {
@@ -18,7 +18,7 @@ interface TUserState {
   requestStatus: RequestStatus;
 }
 
-export const initialState: TUserState = {
+const initialState: TUserState = {
   isAuthChecked: false,
   data: null,
   requestStatus: RequestStatus.Idle
@@ -37,8 +37,8 @@ export const loginUser = createAsyncThunk<
   { email: string; password: string }
 >('user/loginUser', async (user) => {
   const data = await loginUserApi(user);
-  //   setCookie('accessToken', data.accessToken);
-  //   setCookie('refreshToken', data.refreshToken);
+  setCookie('accessToken', data.accessToken);
+  setCookie('refreshToken', data.refreshToken);
   return data.user;
 });
 
@@ -64,7 +64,7 @@ export const logoutUser = createAsyncThunk(
     try {
       await logoutApi();
       localStorage.clear();
-      //   deleteCookie('accessToken');
+      deleteCookie('accessToken');
       dispatch(userActions.userLogout());
     } catch (error) {
       console.log('Ошибка выполнения выхода');
@@ -100,12 +100,12 @@ export const userSlice = createSlice({
       state.data = action.payload;
       state.requestStatus = RequestStatus.Success;
     });
-    // builder.addMatcher(isActionPending(userSlice.name), (state) => {
-    //   state.requestStatus = RequestStatus.Loading;
-    // });
-    // builder.addMatcher(isActionRejected(userSlice.name), (state) => {
-    //   state.requestStatus = RequestStatus.Failed;
-    // });
+    builder.addMatcher(isActionPending(userSlice.name), (state) => {
+      state.requestStatus = RequestStatus.Loading;
+    });
+    builder.addMatcher(isActionRejected(userSlice.name), (state) => {
+      state.requestStatus = RequestStatus.Failed;
+    });
   },
   selectors: {
     getUser: (state: TUserState) => state.data,

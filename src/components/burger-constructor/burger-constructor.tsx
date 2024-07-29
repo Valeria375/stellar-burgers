@@ -4,7 +4,7 @@ import { BurgerConstructorUI } from '@ui';
 // import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../services/store';
-import { userSelectors } from '../../services/userSlice';
+import { userSelectors } from '../../services/slices/userSlice';
 import { useDispatch } from '../../services/store';
 import { useSelector } from '../../services/store';
 
