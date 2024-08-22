@@ -2,6 +2,18 @@
 describe('Страница конструктора бургера', () => {
   const testUrl = 'http://localhost:4000';
   const modalSelector = '[data-cy="modal"]';
+  const ingredientItemBun = '[data-ing="ingredient-item-bun"]';
+  const ingredientItemMain = '[data-ing="ingredient-item-main"]';
+  const ingredientItemSauce = '[data-ing="ingredient-item-sauce"]';
+  const constructorBun1 = '[data-cy="constructor-bun-1"]';
+  const constructorBun2 = '[data-cy="constructor-bun-2"]';
+  const constructorTopping = '[data-cy="constructor-topping"]';
+  const ingredientItem1 = '[data-cy="ingredient-item-1"]';
+  const ingredientItem2 = '[data-cy="ingredient-item-2"]';
+  const modalCloseBtn = '[data-cy="modal-close-btn"]';
+  const modalOverlay = '[data-cy="modal-overlay"]';
+  const orderSummButton = '[data-cy=order-summ] button';
+  const constructorSelector = '[data-cy=constructor]';
 
   beforeEach(() => {
     cy.intercept('GET', 'api/ingredients', {
@@ -25,11 +37,11 @@ describe('Страница конструктора бургера', () => {
   });
 
   afterEach(function () {
-    // очистка хранлищ после выполнения теста 
+    // очистка хранилищ после выполнения теста 
     cy.clearLocalStorage();
     cy.clearCookies();
   });
-  
+
   it('показывать прелоадер во время загрузки ингредиентов', () => {
     cy.visit(testUrl);
     cy.wait('@getIngredients');
@@ -46,16 +58,16 @@ describe('Страница конструктора бургера', () => {
     cy.visit(testUrl);
     cy.wait('@getIngredients');
     // Добавление булки
-    cy.get('[data-ing="ingredient-item-bun"]').contains('Добавить').click();
-    cy.get('[data-cy="constructor-bun-1"]').should('exist');
-    cy.get('[data-cy="constructor-bun-2"]').should('exist');
+    cy.get(ingredientItemBun).contains('Добавить').click();
+    cy.get(constructorBun1).should('exist');
+    cy.get(constructorBun2).should('exist');
 
     // Добавление начинки
-    cy.get('[data-ing="ingredient-item-main"]').contains('Добавить').click();
-    cy.get('[data-cy="constructor-topping"]').should('exist');
+    cy.get(ingredientItemMain).contains('Добавить').click();
+    cy.get(constructorTopping).should('exist');
 
-    cy.get('[data-ing="ingredient-item-sauce"]').contains('Добавить').click();
-    cy.get('[data-cy="constructor-topping"]').should('exist');
+    cy.get(ingredientItemSauce).contains('Добавить').click();
+    cy.get(constructorTopping).should('exist');
   });
 
   it('открывать и закрывать модальное окно ингредиента', () => {
@@ -63,11 +75,11 @@ describe('Страница конструктора бургера', () => {
     cy.wait('@getIngredients');
           
     //Кликнуть на ингредиент для открытия модального окна
-    cy.get('[data-cy="ingredient-item-1"]').click();
+    cy.get(ingredientItem1).click();
     cy.get(modalSelector).should('be.visible');
           
     // Закрыть модальное окно по клику на крестик
-    cy.get('[data-cy="modal-close-btn"]').click();
+    cy.get(modalCloseBtn).click();
     cy.get(modalSelector).should('not.exist');
   });
 
@@ -76,11 +88,11 @@ describe('Страница конструктора бургера', () => {
     cy.wait('@getIngredients');
           
     //Кликнуть на ингредиент для открытия модального окна
-    cy.get('[data-cy="ingredient-item-2"]').click();
+    cy.get(ingredientItem2).click();
     cy.get(modalSelector).should('be.visible');
 
     // Закрыть модальное окно по клику на оверлей
-    cy.get('[data-cy="modal-overlay"]').click('topRight', { force: true });
+    cy.get(modalOverlay).click('topRight', { force: true });
     cy.get(modalSelector).should('not.exist');
   });
 
@@ -88,28 +100,28 @@ describe('Страница конструктора бургера', () => {
     //собираем бургер
     cy.visit(testUrl);
     cy.wait('@getIngredients');
-    cy.get('[data-ing="ingredient-item-bun"]').contains('Добавить').click();
-    cy.get('[data-ing="ingredient-item-main"]').contains('Добавить').click();
-    cy.get('[data-ing="ingredient-item-sauce"]').contains('Добавить').click();
+    cy.get(ingredientItemBun).contains('Добавить').click();
+    cy.get(ingredientItemMain).contains('Добавить').click();
+    cy.get(ingredientItemSauce).contains('Добавить').click();
 
     //Вызывается клик по кнопке «Оформить заказ».
-    cy.get('[data-cy=order-summ] button').click();
+    cy.get(orderSummButton).click();
 
     //Проверяется, что модальное окно открылось и номер заказа верный.
     cy.get(modalSelector).contains('44330').should('exist');
 
     //Закрывается модальное окно и проверяется успешность закрытия.
-    cy.get('[data-cy="modal-close-btn"]').click();
+    cy.get(modalCloseBtn).click();
     cy.get(modalSelector).should('not.exist');
 
     //Проверяется, что конструктор пуст.
-    cy.get('[data-cy=constructor]')
+    cy.get(constructorSelector)
       .contains('Ингредиент 1')
       .should('not.exist');
-    cy.get('[data-cy=constructor]')
+    cy.get(constructorSelector)
       .contains('Ингредиент 3')
       .should('not.exist');
-    cy.get('[data-cy=constructor]')
+    cy.get(constructorSelector)
       .contains('Ингредиент 4')
       .should('not.exist');
   });
