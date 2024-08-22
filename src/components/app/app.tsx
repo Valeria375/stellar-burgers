@@ -1,29 +1,30 @@
-import {
-  ConstructorPage,
-  Feed,
-  ForgotPassword,
-  Login,
-  Profile,
-  ProfileOrders,
-  Register,
-  ResetPassword
-} from '@pages';
+import React, { useEffect } from 'react';
+import { useLocation, useMatch } from 'react-router-dom';
+import { ConstructorPage } from '@pages';
+import { Feed } from '@pages';
+import { NotFound404 } from '@pages';
+import { Login } from '@pages';
+import { Register } from '@pages';
+import { ForgotPassword } from '@pages';
+import { ResetPassword } from '@pages';
+import { Profile } from '@pages';
+import { ProfileOrders } from '@pages';
 import '../../index.css';
 import styles from './app.module.css';
-
-import { AppHeader, IngredientDetails, Modal, OrderInfo } from '@components';
 import {
-  Route,
+  BrowserRouter as Router,
   Routes,
-  useLocation,
-  useMatch,
+  Route,
   useNavigate
 } from 'react-router-dom';
-import { useEffect } from 'react';
+import { AppHeader, OrderStatus } from '@components';
+import { Modal } from '@components';
+import { OrderInfo } from '@components';
+import { IngredientDetails } from '@components';
+import { ProtectedRoute } from '../protectedRoute/protectedRoute';
 import { useDispatch } from '../../services/store';
 import { getIngredients } from '../../services/slices/ingredientsSlice';
 import { checkUserAuth, userActions } from '../../services/slices/userSlice';
-import { ProtectedRoute } from '../protectedRoute/protectedRoute';
 
 const App = () => {
   const location = useLocation();
@@ -44,6 +45,7 @@ const App = () => {
   const profileOrderMatch = useMatch('/profile/orders/:number')?.params.number;
   const feedOrderMatch = useMatch('/feed/:number')?.params.number;
   const orderNumber = profileOrderMatch || feedOrderMatch;
+
   useEffect(() => {
     dispatch(getIngredients());
     dispatch(checkUserAuth()).finally(() => dispatch(userActions.authCheck()));
@@ -52,15 +54,44 @@ const App = () => {
   return (
     <div className={styles.app}>
       <AppHeader />
-      <Routes>
+      <Routes location={background || location}>
         <Route path='/' element={<ConstructorPage />} />
         <Route path='/feed' element={<Feed />} />
-
-        {/* Protected Routes */}
+        <Route path='/ingredients/:id' element={<IngredientDetails />} />
+        <Route
+          path='/feed/:number'
+          element={
+            <div className={styles.detailPageWrap}>
+              <p
+                className={`text text_type_digits-default ${styles.detailHeader}`}
+              >
+                #${orderNumber && orderNumber.padStart(6, '0')}
+              </p>
+              {/* <OrderStatus status={orderInfo && orderInfo.status} /> */}
+              <OrderInfo />
+            </div>
+          }
+        />
+        <Route
+          path='/profile/orders/:number'
+          element={
+            <ProtectedRoute>
+              <div className={styles.detailPageWrap}>
+                <p
+                  className={`text text_type_digits-default ${styles.detailHeader}`}
+                >
+                  #${orderNumber && orderNumber.padStart(6, '0')}
+                </p>
+                <OrderInfo />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+        <Route path='*' element={<NotFound404 />} />
         <Route
           path='/login'
           element={
-            <ProtectedRoute Auth>
+            <ProtectedRoute onlyUnAuth>
               <Login />
             </ProtectedRoute>
           }
@@ -68,7 +99,7 @@ const App = () => {
         <Route
           path='/register'
           element={
-            <ProtectedRoute>
+            <ProtectedRoute onlyUnAuth>
               <Register />
             </ProtectedRoute>
           }
@@ -76,7 +107,7 @@ const App = () => {
         <Route
           path='/forgot-password'
           element={
-            <ProtectedRoute Auth>
+            <ProtectedRoute onlyUnAuth>
               <ForgotPassword />
             </ProtectedRoute>
           }
@@ -84,7 +115,7 @@ const App = () => {
         <Route
           path='/reset-password'
           element={
-            <ProtectedRoute Auth>
+            <ProtectedRoute onlyUnAuth>
               <ResetPassword />
             </ProtectedRoute>
           }
@@ -105,73 +136,37 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path='/feed/:number'
-          element={
-            <ProtectedRoute>
-              <div className={styles.detailPageWrap}>
-                <p
-                  className={`text text_type_digits-default ${styles.detailHeader}`}
-                >
-                  #${orderNumber && orderNumber.padStart(6, '0')}
-                </p>
-                <OrderInfo />
-              </div>
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path='/profile/orders/:number'
-          element={
-            <ProtectedRoute>
-              <div className={styles.detailPageWrap}>
-                <p
-                  className={`text text_type_digits-default ${styles.detailHeader}`}
-                >
-                  #${orderNumber && orderNumber.padStart(6, '0')}
-                </p>
-                <OrderInfo />
-              </div>
-            </ProtectedRoute>
-          }
-        />
       </Routes>
       {background && (
         <Routes>
-          {/* Modals */}
           <Route
             path='/feed/:number'
             element={
               <Modal
                 title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
-                // title='проба'
                 onClose={handleFeedModalClose}
               >
                 <OrderInfo />
               </Modal>
             }
           />
-
           <Route
             path='/ingredients/:id'
             element={
               <Modal
                 title='Детали ингредиента'
                 onClose={handleModalIngredientClose}
-                // onClose={handleFeedModalClose}
               >
                 <IngredientDetails />
               </Modal>
             }
           />
-
           <Route
             path='/profile/orders/:number'
             element={
               <ProtectedRoute>
                 <Modal
                   title={`#${orderNumber && orderNumber.padStart(6, '0')}`}
-                  // title='проба'
                   onClose={handleProfileOrdersModalClose}
                 >
                   <OrderInfo />

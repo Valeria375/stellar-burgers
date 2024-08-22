@@ -8,14 +8,14 @@ import { orderSlice } from '../orderSlice';
 import { rootReducer } from '../../store';
 
 const initialRootState = {
-    [ingredientsSlice.name]: ingredientsSlice.getInitialState(),
-    [userSlice.name]: userSlice.getInitialState(),
-    [burgerConstructorSlice.name]: burgerConstructorSlice.getInitialState(),
-    [feedSlice.name]: feedSlice.getInitialState(),
-    [orderListSlice.name]: orderListSlice.getInitialState(),
-    [orderSlice.name]: orderSlice.getInitialState(),
-  };
-  
+  [ingredientsSlice.name]: ingredientsSlice.getInitialState(),
+  [userSlice.name]: userSlice.getInitialState(),
+  [burgerConstructorSlice.name]: burgerConstructorSlice.getInitialState(),
+  [feedSlice.name]: feedSlice.getInitialState(),
+  [orderListSlice.name]: orderListSlice.getInitialState(),
+  [orderSlice.name]: orderSlice.getInitialState()
+};
+
 describe('rootReducer', () => {
   test('должен правильно объединять состояния различных редюсеров', () => {
     // Пример действия и ожидания

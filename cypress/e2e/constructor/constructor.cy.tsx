@@ -1,3 +1,4 @@
+/// <reference types="cypress" />
 describe('Страница конструктора бургера', () => {
   const testUrl = 'http://localhost:4000';
   const modalSelector = '[data-cy="modal"]';

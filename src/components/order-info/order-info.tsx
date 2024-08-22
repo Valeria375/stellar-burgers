@@ -7,7 +7,6 @@ import { getOrder } from '../../services/slices/orderSlice';
 import { useParams } from 'react-router-dom';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
   const dispatch = useDispatch();
   const { number } = useParams<{ number: string }>();
   const orderData = useSelector((state: RootState) => state.order.info);

@@ -4,21 +4,24 @@ import { Preloader } from '../ui/preloader';
 import { userSelectors } from '../../services/slices/userSlice';
 
 type ProtectedRouteProps = {
-  Auth?: boolean;
+  onlyUnAuth?: boolean;
   children: React.ReactElement;
 };
 
-export const ProtectedRoute = ({ Auth, children }: ProtectedRouteProps) => {
+export const ProtectedRoute = ({
+  onlyUnAuth,
+  children
+}: ProtectedRouteProps) => {
   const location = useLocation();
   const { getIsAuthChecked, getUser } = userSelectors;
   const user = useSelector(getUser);
-  const isAuth = useSelector(getIsAuthChecked);
+  const isAuthChecked = useSelector(getIsAuthChecked);
 
-  if (!isAuth) {
+  if (!isAuthChecked) {
     return <Preloader />;
   }
 
-  if (!Auth && !user) {
+  if (!onlyUnAuth && !user) {
     return (
       <Navigate
         replace
@@ -30,7 +33,7 @@ export const ProtectedRoute = ({ Auth, children }: ProtectedRouteProps) => {
     );
   }
 
-  if (Auth && user) {
+  if (onlyUnAuth && user) {
     const from = location.state?.from || { pathname: '/' };
     const locationState = location.state?.from?.locationState || null;
     return <Navigate replace to={from} state={{ locationState }} />;

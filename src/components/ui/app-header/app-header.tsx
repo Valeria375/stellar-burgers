@@ -1,4 +1,5 @@
 import React, { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 import styles from './app-header.module.css';
 import { TAppHeaderUIProps } from './type';
 import {
@@ -7,7 +8,6 @@ import {
   Logo,
   ProfileIcon
 } from '@zlden/react-developer-burger-ui-components';
-import { NavLink } from 'react-router-dom';
 
 export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
   <header className={styles.header}>
@@ -21,7 +21,7 @@ export const AppHeaderUI: FC<TAppHeaderUIProps> = ({ userName }) => (
         >
           {({ isActive }) => (
             <>
-              <BurgerIcon type={'primary'} />
+              <BurgerIcon type={isActive ? 'primary' : 'secondary'} />
               <p className='text text_type_main-default ml-2 mr-10'>
                 Конструктор
               </p>
