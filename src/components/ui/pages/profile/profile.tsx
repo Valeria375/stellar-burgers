@@ -1,9 +1,7 @@
 import { FC } from 'react';
-
 import { Button, Input } from '@zlden/react-developer-burger-ui-components';
 import styles from './profile.module.css';
 import commonStyles from '../common.module.css';
-
 import { ProfileUIProps } from './type';
 import { ProfileMenu } from '@components';
 
@@ -22,6 +20,7 @@ export const ProfileUI: FC<ProfileUIProps> = ({
     <form
       className={`mt-30 ${styles.form} ${commonStyles.form}`}
       onSubmit={handleSubmit}
+      data-cy='user-profile'
     >
       <>
         <div className='pb-6'>
@@ -73,7 +72,12 @@ export const ProfileUI: FC<ProfileUIProps> = ({
             >
               Отменить
             </Button>
-            <Button type='primary' size='medium' htmlType='submit'>
+            <Button
+              type='primary'
+              size='medium'
+              htmlType='submit'
+              onClick={handleSubmit}
+            >
               Сохранить
             </Button>
           </div>
